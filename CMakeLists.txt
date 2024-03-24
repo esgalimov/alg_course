@@ -16,13 +16,15 @@ endif()
 find_package(GTest REQUIRED)
 enable_testing()
 
-add_executable(arrays_main ${CMAKE_CURRENT_SOURCE_DIR}/lesson1/main.cpp
-                           ${CMAKE_CURRENT_SOURCE_DIR}/lesson1/arrays.cpp)
-
 add_executable(arrays_test ${CMAKE_CURRENT_SOURCE_DIR}/lesson1/arrays_test.cpp
                            ${CMAKE_CURRENT_SOURCE_DIR}/lesson1/arrays.cpp)
 
+add_executable(list_test ${CMAKE_CURRENT_SOURCE_DIR}/lesson2/list_test.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/lesson2/list.cpp)
+
 target_link_libraries(arrays_test PRIVATE ${GTEST_LIBRARIES})
+target_link_libraries(list_test   PRIVATE ${GTEST_LIBRARIES})
 
 target_include_directories(arrays_test PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lesson1)
-target_include_directories(arrays_main PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lesson1)
+target_include_directories(list_test   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/lesson1)
+
