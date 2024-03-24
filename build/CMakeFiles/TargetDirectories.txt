@@ -1,0 +1,5 @@
+/Users/esgalimov/documents/cplusplus/alg_course/build/CMakeFiles/arrays_main.dir
+/Users/esgalimov/documents/cplusplus/alg_course/build/CMakeFiles/arrays_test.dir
+/Users/esgalimov/documents/cplusplus/alg_course/build/CMakeFiles/test.dir
+/Users/esgalimov/documents/cplusplus/alg_course/build/CMakeFiles/edit_cache.dir
+/Users/esgalimov/documents/cplusplus/alg_course/build/CMakeFiles/rebuild_cache.dir
