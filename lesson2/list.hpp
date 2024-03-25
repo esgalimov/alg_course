@@ -2,6 +2,7 @@
 #include <iterator>
 #include <memory>
 #include <cstddef>
+#include <stdexcept>
 
 template <typename ElemT>
 requires std::is_arithmetic_v<ElemT>
@@ -23,11 +24,13 @@ class list_iterator final {
 public:
     using iterator_category = std::forward_iterator_tag;
     using difference_type   = std::ptrdiff_t;
-    using value_type        = detail::node_t<ElemT>;
+    using value_type        = ElemT;
     using pointer           = value_type*;
     using reference         = value_type&;
     using const_pointer     = const value_type*;
     using const_reference   = const value_type&;
+
+    using node_ptr          = detail::node_t<ElemT>*;
 
     list_iterator& operator++() {
         ptr_ = ptr_->next_;
@@ -40,21 +43,19 @@ public:
         return temp;
     }
 
-    ElemT& operator*()         const noexcept { return ptr_->value_; }
-    list_iterator operator->() const noexcept { return *this; }
+    reference operator*()  const noexcept { return                ptr_->value_;  }
+    pointer   operator->() const noexcept { return std::addressof(ptr_->value_); }
 
     bool operator==(list_iterator rhs) const noexcept { return ptr_ == rhs.ptr_; }
     bool operator!=(list_iterator rhs) const noexcept { return !(*this == rhs); }
 
-private:
-    friend class my_list<ElemT>;
-
     void set_next(list_iterator iter) { ptr_->next_ = iter.ptr_; }
 
-    pointer ptr_;
+private:
+    node_ptr ptr_;
 
 public:
-    list_iterator(pointer ptr = nullptr) : ptr_(ptr) {}
+    list_iterator(node_ptr ptr = nullptr) : ptr_(ptr) {}
 };
 
 template <typename ElemT>
@@ -79,7 +80,15 @@ public:
         before_begin_.set_next(end_);
     }
 
+    my_list(const my_list& lst) = delete;
+    my_list(my_list&& lst)      = delete;
+
+    my_list& operator=(const my_list& lst) = delete;
+    my_list& operator=(my_list&& lst)      = delete;
+
     void emplace_after(iterator iter, int value = ElemT{}) {
+        if (iter == end_) throw std::runtime_error("Cannot emplace after end!");
+
         iterator new_elem = create_node(value),
                  it = iter,
                  new_after  = ++iter;
@@ -93,6 +102,75 @@ public:
 
     void push_front(int value = ElemT{}) {
         emplace_after(before_begin_, value);
+    }
+
+    bool has_cycle() const {
+        if (begin_ == end_) return false;
+
+        iterator slow =   begin();
+        iterator fast = ++begin();
+
+        while (slow != fast) {
+            if (fast++ == end_ || fast == end_) return false;
+
+            slow++; fast++;
+        }
+
+        return true;
+    }
+
+    void reverse() {
+        iterator prev = end_, curr = begin_, next;
+
+        while (curr != end_) {
+            next = std::next(curr);
+            curr.set_next(prev);
+            prev = curr;
+            curr = next;
+        }
+        begin_ = prev;
+        before_begin_.set_next(begin_);
+    }
+
+    iterator get_middle_node() const {
+        iterator slow = begin_, fast = begin_;
+
+        while (fast++ != end_ && fast != end_) {
+            slow++;
+            fast++;
+        }
+        return slow;
+    }
+
+    void erase(ElemT value) {
+        iterator prev = before_begin_, curr = begin_;
+
+        while (curr != end_) {
+            if (*curr == value) {
+                prev.set_next(++curr);
+                sz_--;
+            }
+            else prev = curr++;
+        }
+
+        begin_ = std::next(before_begin_);
+    }
+
+    void merge_sorted_lists(my_list<ElemT>& lst) {
+        iterator head1 = begin_, 
+                 next1 = std::next(begin_), 
+                 head2 = lst.begin_;
+                 
+        
+        while (head1 != end_ && next1 != end_ && head2 != lst.end_) {
+            if (*head1 <= *head2 && *head2 <= *next1) {
+                emplace_after(head1, *head2);
+                head2++;
+            }
+            else next1++;  
+
+            head1++;    
+        }
     }
 
     bool empty() { return sz_ == 0;}
