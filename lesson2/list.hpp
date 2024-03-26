@@ -104,7 +104,7 @@ public:
         emplace_after(before_begin_, value);
     }
 
-    bool has_cycle() const {
+    bool has_cycle() {
         if (begin_ == end_) return false;
 
         iterator slow =   begin();
@@ -157,19 +157,34 @@ public:
     }
 
     void merge_sorted_lists(my_list<ElemT>& lst) {
-        iterator head1 = begin_, 
-                 next1 = std::next(begin_), 
+        iterator head1 = before_begin_, 
+                 next1 = begin_, 
                  head2 = lst.begin_;
-                 
-        
+
+        while (head2 != lst.end_ && *head2 <= *next1) {
+            emplace_after(head1, *head2);
+            ++head1;
+            ++head2;
+        }
+    
         while (head1 != end_ && next1 != end_ && head2 != lst.end_) {
             if (*head1 <= *head2 && *head2 <= *next1) {
                 emplace_after(head1, *head2);
-                head2++;
+                ++head2;
             }
-            else next1++;  
+            else ++next1;  
 
-            head1++;    
+            ++head1;    
+        }
+
+        std::cout << "after second cycle: " << (head1 == end_) << std::endl;
+
+        while (head2 != lst.end_) {
+            std::cout << "in third cycle: " << (head1 == end_) << std::endl;
+            std::cout << *head2 << std::endl;
+            emplace_after(head1, *head2);
+            ++head1;
+            ++head2;
         }
     }
 
