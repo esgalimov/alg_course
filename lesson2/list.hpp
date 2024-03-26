@@ -157,35 +157,32 @@ public:
     }
 
     void merge_sorted_lists(my_list<ElemT>& lst) {
-        iterator head1 = before_begin_, 
-                 next1 = begin_, 
+        iterator head1 = before_begin_,  
                  head2 = lst.begin_;
 
-        while (head2 != lst.end_ && *head2 <= *next1) {
-            emplace_after(head1, *head2);
+        while (head2 != lst.end_ && *head2 <= *begin_) {
+            link_after(head1, head2, lst);
             ++head1;
-            ++head2;
         }
+
+        iterator next1 = begin_;
     
         while (head1 != end_ && next1 != end_ && head2 != lst.end_) {
             if (*head1 <= *head2 && *head2 <= *next1) {
-                emplace_after(head1, *head2);
-                ++head2;
+                link_after(head1, head2, lst);
             }
             else ++next1;  
 
             ++head1;    
         }
 
-        std::cout << "after second cycle: " << (head1 == end_) << std::endl;
-
         while (head2 != lst.end_) {
-            std::cout << "in third cycle: " << (head1 == end_) << std::endl;
-            std::cout << *head2 << std::endl;
-            emplace_after(head1, *head2);
+            link_after(head1, head2, lst);
             ++head1;
-            ++head2;
         }
+
+        begin_ = std::next(before_begin_);
+        lst.before_begin_.set_next(lst.begin());
     }
 
     bool empty() { return sz_ == 0;}
@@ -202,6 +199,15 @@ private:
     iterator create_node(int value) {
         buffer_.push_back(std::move(std::make_unique<detail::node_t<ElemT>>(value)));
         return iterator(buffer_.back().get());
+    }
+
+    void link_after(iterator head1, iterator& head2, my_list<ElemT>& lst) {
+        iterator next = std::next(head1), new_head2 = std::next(head2);
+        head1.set_next(head2);
+        head2.set_next(next);
+        
+        head2 = new_head2;
+        lst.begin_ = head2;
     }
 
 };

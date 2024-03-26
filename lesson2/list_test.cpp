@@ -214,9 +214,121 @@ TEST(merge_simple_test, test_1) {
 
     my_list<int>::iterator it = lst1.begin();
 
-    while (it != lst1.end()) std::cout << *it++ << std::endl;
+    for (auto&& i : ans) ASSERT_EQ(i, *it++);
+}
 
-    it = lst1.begin(); 
+TEST(merge_simple_test, test_2) {
+    std::vector vec1{3, 2, 1};
+    std::vector vec2{3, 2, 1};
+    std::vector  ans{1, 1, 2, 2, 3, 3};
+
+    my_list<int> lst1;
+    my_list<int> lst2;
+
+    for (auto&& i : vec1) lst1.push_front(i); 
+    for (auto&& i : vec2) lst2.push_front(i); 
+
+    lst1.merge_sorted_lists(lst2);
+
+    my_list<int>::iterator it = lst1.begin();
+
+    // while (it != lst1.end()) std::cout << *it++ << std::endl;
+
+    // it = lst1.begin(); 
+
+    for (auto&& i : ans) ASSERT_EQ(i, *it++);
+}
+
+TEST(merge_simple_test, test_3) {
+    std::vector vec1{3};
+    std::vector vec2{3};
+    std::vector  ans{3, 3};
+
+    my_list<int> lst1;
+    my_list<int> lst2;
+
+    for (auto&& i : vec1) lst1.push_front(i); 
+    for (auto&& i : vec2) lst2.push_front(i); 
+
+    lst1.merge_sorted_lists(lst2);
+
+    my_list<int>::iterator it = lst1.begin();
+
+    for (auto&& i : ans) ASSERT_EQ(i, *it++);
+}
+
+TEST(merge_simple_test, test_4) {
+    std::vector vec1{3, 2, 1};
+    std::vector vec2{6, 5, 4};
+    std::vector  ans{1, 2, 3, 4, 5, 6};
+
+    my_list<int> lst1;
+    my_list<int> lst2;
+
+    for (auto&& i : vec1) lst1.push_front(i); 
+    for (auto&& i : vec2) lst2.push_front(i); 
+
+    lst1.merge_sorted_lists(lst2);
+
+    my_list<int>::iterator it = lst1.begin();
+
+    // while (it != lst1.end()) std::cout << *it++ << std::endl;
+
+    // it = lst1.begin();
+
+    for (auto&& i : ans) ASSERT_EQ(i, *it++);
+}
+
+TEST(merge_simple_test, test_5) {
+    std::vector vec2{3, 2, 1};
+    std::vector vec1{6, 5, 4};
+    std::vector  ans{1, 2, 3, 4, 5, 6};
+
+    my_list<int> lst1;
+    my_list<int> lst2;
+
+    for (auto&& i : vec1) lst1.push_front(i); 
+    for (auto&& i : vec2) lst2.push_front(i); 
+
+    lst1.merge_sorted_lists(lst2);
+
+    my_list<int>::iterator it = lst1.begin();
+
+    // while (it != lst1.end()) std::cout << *it++ << std::endl;
+
+    // it = lst1.begin(); 
+
+    for (auto&& i : ans) ASSERT_EQ(i, *it++);
+}
+
+TEST(merge_empty_test, test_1) {
+    std::vector vec{3, 2, 1};
+    std::vector  ans{1, 2, 3};
+
+    my_list<int> lst1;
+    my_list<int> lst2;
+
+    for (auto&& i : vec) lst1.push_front(i); 
+
+    lst1.merge_sorted_lists(lst2);
+
+    my_list<int>::iterator it = lst1.begin(); 
+
+    for (auto&& i : ans) ASSERT_EQ(i, *it++);
+}
+
+TEST(merge_empty_test, test_2) {
+    std::vector vec{3, 2, 1};
+    std::vector  ans{1, 2, 3};
+
+    my_list<int> lst1;
+    my_list<int> lst2;
+
+    for (auto&& i : vec) lst2.push_front(i); 
+
+    lst1.merge_sorted_lists(lst2);
+
+    my_list<int>::iterator it = lst1.begin(); 
 
     for (auto&& i : ans) ASSERT_EQ(i, *it++);
 }
