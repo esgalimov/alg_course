@@ -2,6 +2,7 @@
 #include <stack>
 #include <queue>
 #include <string>
+#include <list>
 
 int get_copy_time(int doc_cnt, int time_x, int time_y) {
     if (time_x <= 0 || time_y <= 0 || doc_cnt <= 0) return 0;
@@ -92,4 +93,34 @@ bool is_subsequence_iter(std::string first, std::string second) {
         ++head2;
     }
     return head1 == tail1;
+}
+
+std::string remove_duplicates(std::string str) {
+    if (str.size() <= 1) return str;
+
+    std::list<char> ch_list{str.begin(), str.end()};
+    
+    auto slow = ch_list.begin(), fast = ++ch_list.begin(), tail = ch_list.end();
+
+    while (fast != tail) {
+        //std::cout << *slow << *fast << std::endl;
+        if (*slow == *fast) {
+            auto saved_slow = std::prev(slow), 
+                 saved_fast = std::next(fast);
+            
+            //while (saved_fast != tail && *saved_fast == *fast) ++saved_fast;
+
+            ch_list.erase(slow, std::next(fast));
+
+            slow = saved_slow;
+            fast = saved_fast;
+        }
+        else {
+            ++slow;
+            ++fast;
+        }
+    }
+    //for (auto&& ch : ch_list) std::cout << ch;
+    //std::cout << std::endl;
+    return std::string{ch_list.begin(), ch_list.end()};
 }

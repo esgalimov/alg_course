@@ -197,6 +197,41 @@ TEST(subsequence_iter_test, test_8) {
 //<-- is_subsequence_iter end
 
 
+//----------remove_duplicates----------
+TEST(remove_duplicates, test_1) {
+    ASSERT_EQ("fsd", remove_duplicates("fqffqzzsd"));
+}
+
+TEST(remove_duplicates, test_2) {
+    ASSERT_EQ("c", remove_duplicates("cdffd"));
+}
+
+TEST(remove_duplicates, test_3) {
+    ASSERT_EQ("uiui", remove_duplicates("uioouiouuo"));
+}
+
+TEST(remove_duplicates, test_4) {
+    ASSERT_EQ("", remove_duplicates("xyyx"));
+}
+
+TEST(remove_duplicates, test_5) {
+    ASSERT_EQ("w", remove_duplicates("w"));
+}
+
+TEST(remove_duplicates, test_6) {
+    ASSERT_EQ("", remove_duplicates(""));
+}
+
+TEST(remove_duplicates, test_7) {
+    ASSERT_EQ("wf", remove_duplicates("wasddsaf"));
+}
+
+TEST(remove_duplicates, test_8) {
+    ASSERT_EQ("ab", remove_duplicates("aaabbb"));
+}
+//  <--remove_duplicates end
+
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
